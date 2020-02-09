@@ -1,3 +1,5 @@
+package Demo;
+
 import java.util.*;
 
 public class StackDemo {
