@@ -2,6 +2,7 @@ import java.io.*;
 
 public class PostfixReader {
 
+
 	public static void main(String[] args) {
 		PostfixReader myAnswer = new PostfixReader();
 		myAnswer.doConversion();
@@ -37,4 +38,23 @@ public class PostfixReader {
 
 class Stack {
 	// TODO: implement Stack in this class
+	private String[] stack;
+	private int size;
+	public Stack(){
+		stack=new String[256];
+		size=-1;
+	}
+	public void push(String input){
+		size+=1;
+		stack[size]=input;
+	}
+	public String pop(){
+		if (size > -1) {
+			String output;
+			output = stack[size];
+			size -= 1;
+			return output;
+		}
+		return null;
+	}
 }
