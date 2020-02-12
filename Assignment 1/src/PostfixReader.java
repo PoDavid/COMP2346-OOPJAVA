@@ -2,7 +2,8 @@ import java.io.*;
 import java.text.DecimalFormat;
 
 /**
- * The type Postfix reader.
+ * The Postfixreader class, used to convert an inputted postfix to infix with result being evaluated.
+ * @author Po Yat Ching David UID:3035372098
  */
 public class PostfixReader {
 	/**
@@ -103,7 +104,6 @@ public class PostfixReader {
 	}
 
 	/**
-	 * Do conversion.
 	 * Get Postfix from input using readPostfix()
 	 * Convert Postfix to Infix (and print the result)
 	 * Calculate the result of the Infix using evalInfix
