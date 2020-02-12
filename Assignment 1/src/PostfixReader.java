@@ -1,17 +1,39 @@
 import java.io.*;
-import java.util.Arrays;
 
 public class PostfixReader {
-
-	private Stack stack;
-
-	public PostfixReader() {
-		stack = new Stack();
-	}
 	public boolean is_operator(String a){
 		return ((a.equals("+")) || (a.equals("-")) || (a.equals("*")) || (a.equals("/")) | (a.equals("^")));
 	}
-
+	public String[] split_expression(String input){
+		String[] output = new String[256];
+		int j=0;
+		String operand = null;
+		char[]input_array = input.toCharArray();
+		for(int i=0;i<input_array.length;i+=1){
+			if(input_array[i]>='0'&&input_array[i]<='9') {
+				if(operand==null)
+					operand= String.valueOf(input_array[i]);
+				else
+					operand = operand + input_array[i];
+			}
+			else if(!(input_array[i]>='0'&&input_array[i]<='9')){
+				if(i!=0&&input_array[i]=='-'&&(!(input_array[i-1]>='0'&&input_array[i-1]<='9'))){
+					operand="-";
+				}
+				else if(operand==null){
+					output[j]= String.valueOf(input_array[i]);
+					j+=1;
+				}
+				else{
+					output[j]=operand;
+					operand=null;
+					output[j+1] = String.valueOf(input_array[i]);
+					j+=2;
+				}
+			}
+		}
+		return output;
+	}
 	public static void main(String[] args) {
 		PostfixReader myAnswer = new PostfixReader();
 		myAnswer.doConversion();
@@ -21,6 +43,8 @@ public class PostfixReader {
 		// TODO: read Postfix from input using readPostfix(), then convert it to infix and
 		// print it out
 		String[]  input;
+		String[] output = new String[256];
+		Stack stack = new Stack();
 		input = readPostfix();
 		if (input.length > 0){
 			int i = 0;
@@ -43,8 +67,9 @@ public class PostfixReader {
 		}
 		String infix = stack.get_infix();
 		System.out.print("Infix: ");
-		for (char c : infix.toCharArray()) {
-    		System.out.print(c + " ");
+		output=split_expression(infix);
+		for(int i=0;i<output.length&&output[i]!=null;i+=1){
+			System.out.print(output[i]+" ");
 		}
 		evalInfix(infix);
 	}
@@ -53,7 +78,9 @@ public class PostfixReader {
 		// TODO: evaluate the infix representation of the input arithmetic expression, 
 		// and then print the result of the evaluation of the expression on the next 
 		// line.
-
+		//System.out.print(infix);
+		Stack operand_stack = new Stack();
+		Stack operator_stack = new Stack();
 	}
 
 	public String[] readPostfix() {
