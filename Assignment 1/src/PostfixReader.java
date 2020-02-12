@@ -1,10 +1,26 @@
 import java.io.*;
 import java.text.DecimalFormat;
 
+/**
+ * The type Postfix reader.
+ */
 public class PostfixReader {
+	/**
+	 * Determine whether a String is an operator or not
+	 *
+	 * @param a The String to be checked
+	 * @return the boolean of whether the input is an operator or not
+	 */
 	public boolean is_operator(String a){
 		return ((a.equals("+")) || (a.equals("-")) || (a.equals("*")) || (a.equals("/")) | (a.equals("^")));
 	}
+
+	/**
+	 * Split an arithmetic expression String to String[].
+	 *
+	 * @param input the input String expression
+	 * @return output the split String[] expression
+	 */
 	public String[] split_expression(String input){
 		String[] output = new String[256];
 		int j=0;
@@ -43,6 +59,15 @@ public class PostfixReader {
 		return output;
 	}
 
+	/**
+	 * Calculate the result of an arithmetic operation.
+	 * Format: a operator b (e.g. a * b)
+	 *
+	 * @param operator  the operator
+	 * @param operand_a the operand a
+	 * @param operand_b the operand b
+	 * @return the String result (remove trailing zeroes)
+	 */
 	public String calculator(String operator, String operand_a, String operand_b){
 		double answer=0;
 		double a = Double.parseDouble(operand_a);
@@ -71,11 +96,18 @@ public class PostfixReader {
 		DecimalFormat df = new DecimalFormat("###.#");
   		return String.valueOf(df.format(answer));
 	}
+
 	public static void main(String[] args) {
 		PostfixReader myAnswer = new PostfixReader();
 		myAnswer.doConversion();
 	}
 
+	/**
+	 * Do conversion.
+	 * Get Postfix from input using readPostfix()
+	 * Convert Postfix to Infix (and print the result)
+	 * Calculate the result of the Infix using evalInfix
+	 */
 	public void doConversion() {
 		// TODO: read Postfix from input using readPostfix(), then convert it to infix and
 		// print it out
@@ -116,6 +148,11 @@ public class PostfixReader {
 		}
 	}
 
+	/**
+	 * Eval infix.
+	 * Evaluate the result of a given infix (String) and print it
+	 * @param infix the given infix String
+	 */
 	public void evalInfix(String infix) {
 		// TODO: evaluate the infix representation of the input arithmetic expression, 
 		// and then print the result of the evaluation of the expression on the next 
@@ -124,25 +161,30 @@ public class PostfixReader {
 		Stack operand_stack = new Stack();
 		Stack operator_stack = new Stack();
 		String operator, operand_a, operand_b, result;
-		String[] splitted_infix = split_expression(infix);
-		for(int i=0;i<splitted_infix.length&&splitted_infix[i]!=null;i+=1){
-			if(is_operator(String.valueOf(splitted_infix[i]))){
-				operator_stack.push(splitted_infix[i]);
+		String[] split_infix = split_expression(infix);
+		for(int i=0;i<split_infix.length&&split_infix[i]!=null;i+=1){
+			if(is_operator(String.valueOf(split_infix[i]))){
+				operator_stack.push(split_infix[i]);
 			}
-			else if(splitted_infix[i].equals(")")){
+			else if(split_infix[i].equals(")")){
 				operator=operator_stack.pop();
 				operand_b=operand_stack.pop();
 				operand_a=operand_stack.pop();
 				result = calculator(operator,operand_a,operand_b);
 				operand_stack.push(result);
 			}
-			else if(!splitted_infix[i].equals("(")){
-				operand_stack.push(splitted_infix[i]);
+			else if(!split_infix[i].equals("(")){
+				operand_stack.push(split_infix[i]);
 			}
 		}
 		System.out.println("Result: "+ operand_stack.pop());
 	}
 
+	/**
+	 * Read postfix from input.
+	 *
+	 * @return the input String[]
+	 */
 	public String[] readPostfix() {
 		BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 		String inputLine;
@@ -160,20 +202,37 @@ public class PostfixReader {
 
 }
 
+/**
+ * The type Stack.
+ */
 class Stack {
 	// TODO: implement Stack in this class
 	private String[] stack;
 	private int size;
+
+	/**
+	 * Instantiates a new Stack.
+	 */
 	public Stack(){
 		stack=new String[256];
 		size=-1;
 	}
 
+	/**
+	 * Push a given input to the stack.
+	 * And increase the size of the stack by 1
+	 * @param input the input String to be pushed
+	 */
 	public void push(String input){
 		size+=1;
 		stack[size]=input;
 	}
 
+	/**
+	 * Pop the top String of the stack.
+	 * And decrease the size of the stack by 1
+	 * @return the top String
+	 */
 	public String pop(){
 		if (size > -1) {
 			String output;
@@ -184,6 +243,11 @@ class Stack {
 		return null;
 	}
 
+	/**
+	 * Get the infix from the resulting stack.
+	 *
+	 * @return the bottom String of the Stack
+	 */
 	public String get_infix(){
         return stack[0];
 	}
