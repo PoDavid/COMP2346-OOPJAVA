@@ -1,4 +1,5 @@
 import java.io.*;
+import java.text.DecimalFormat;
 
 public class PostfixReader {
 	public boolean is_operator(String a){
@@ -12,7 +13,10 @@ public class PostfixReader {
 		for(int i=0;i<input_array.length;i+=1){
 			if(input_array[i]>='0'&&input_array[i]<='9') {
 				if(i+1!=input_array.length&&input_array[i+1]=='.'){
-					operand= String.valueOf(input_array[i])+".";
+					if(operand!=null)
+						operand = operand + input_array[i] +".";
+					else
+						operand = input_array[i] +".";
 					i+=1;
 				}
 				else if(operand==null)
@@ -38,6 +42,35 @@ public class PostfixReader {
 		}
 		return output;
 	}
+
+	public String calculator(String operator, String operand_a, String operand_b){
+		double answer=0;
+		double a = Double.parseDouble(operand_a);
+		double b = Double.parseDouble(operand_b);
+		switch(operator){
+			case"^":
+				double sum = a;
+				for(int i=0;i<b-1;i++)
+					sum*=a;
+				answer = sum;
+				break;
+			case"*":
+				answer = a*b;
+				break;
+			case"/":
+				answer = a/b;
+				break;
+			case"+":
+				answer = a+b;
+				break;
+			case"-":
+				answer = a-b;
+				break;
+
+		}
+		DecimalFormat df = new DecimalFormat("###.#");
+  		return String.valueOf(df.format(answer));
+	}
 	public static void main(String[] args) {
 		PostfixReader myAnswer = new PostfixReader();
 		myAnswer.doConversion();
@@ -47,7 +80,8 @@ public class PostfixReader {
 		// TODO: read Postfix from input using readPostfix(), then convert it to infix and
 		// print it out
 		String[]  input;
-		String[] output = new String[256];
+		String[] output;
+		boolean error=false;
 		Stack stack = new Stack();
 		input = readPostfix();
 		if (input.length > 0){
@@ -59,7 +93,8 @@ public class PostfixReader {
 					String a = stack.pop();
 					String b = stack.pop();
 					if (a == null || b == null){
-						System.out.println("Invalid Postfix" + "\n");
+						System.out.println("Error: Invalid postfix");
+						error=true;
 						break;
 					}
 					else {
@@ -70,12 +105,15 @@ public class PostfixReader {
 			}
 		}
 		String infix = stack.get_infix();
-		System.out.print("Infix: ");
-		output=split_expression(infix);
-		for(int i=0;i<output.length&&output[i]!=null;i+=1){
-			System.out.print(output[i]+" ");
+		if (!error) {
+			System.out.print("Infix: ");
+			output = split_expression(infix);
+			for (int i = 0; i < output.length && output[i] != null; i += 1) {
+				System.out.print(output[i] + " ");
+			}
+			System.out.println();
+			evalInfix(infix);
 		}
-		evalInfix(infix);
 	}
 
 	public void evalInfix(String infix) {
@@ -85,6 +123,24 @@ public class PostfixReader {
 		//System.out.print(infix);
 		Stack operand_stack = new Stack();
 		Stack operator_stack = new Stack();
+		String operator, operand_a, operand_b, result;
+		String[] splitted_infix = split_expression(infix);
+		for(int i=0;i<splitted_infix.length&&splitted_infix[i]!=null;i+=1){
+			if(is_operator(String.valueOf(splitted_infix[i]))){
+				operator_stack.push(splitted_infix[i]);
+			}
+			else if(splitted_infix[i].equals(")")){
+				operator=operator_stack.pop();
+				operand_b=operand_stack.pop();
+				operand_a=operand_stack.pop();
+				result = calculator(operator,operand_a,operand_b);
+				operand_stack.push(result);
+			}
+			else if(!splitted_infix[i].equals("(")){
+				operand_stack.push(splitted_infix[i]);
+			}
+		}
+		System.out.println("Result: "+ operand_stack.pop());
 	}
 
 	public String[] readPostfix() {
