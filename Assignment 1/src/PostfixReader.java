@@ -11,7 +11,11 @@ public class PostfixReader {
 		char[]input_array = input.toCharArray();
 		for(int i=0;i<input_array.length;i+=1){
 			if(input_array[i]>='0'&&input_array[i]<='9') {
-				if(operand==null)
+				if(i+1!=input_array.length&&input_array[i+1]=='.'){
+					operand= String.valueOf(input_array[i])+".";
+					i+=1;
+				}
+				else if(operand==null)
 					operand= String.valueOf(input_array[i]);
 				else
 					operand = operand + input_array[i];
