@@ -1,11 +1,22 @@
 import java.util.ArrayList;
 
+/**
+ * The type Diamond, a subclass of Shape
+ * Used to model Diamonds
+ * @author Po Yat Ching 3035372098
+ */
 public class Diamond extends Shape{
     private int size;
+
+    /**
+     * Instantiates a new Diamond.
+     * Initialize the 2D boolean ArrayList that represents a Diamond with the given size
+     * @param size the size of the Diamond
+     */
     Diamond(int size){
         super();
         this.size = size;
-        //Create Empty Board
+        //Create Empty 2D ArrayList
         for(int i=0; i < size*2-1; i++) {
             ArrayList<Boolean> row = new ArrayList<>();
             for(int j=0; j < size*2-1; j++) {
