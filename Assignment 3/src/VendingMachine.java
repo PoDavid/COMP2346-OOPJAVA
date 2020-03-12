@@ -98,7 +98,7 @@ public class VendingMachine {
             }
         }
         if (!stock)
-            return "Out of Stock!";
+            return "Out of stock!";
         //Check if needed changes
         if(inserted_coin>price){
             //Check if enough changes
