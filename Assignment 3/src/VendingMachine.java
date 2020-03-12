@@ -1,22 +1,51 @@
 import java.util.ArrayList;
 import java.util.Collections;
 
+/**
+ * The VendingMachine class, used to model a vending machine. The machine allows customers to insert coins,
+ * purchase a product and reject inserted coins.
+ * @author Po Yat Ching David UID:3035372098
+ */
 public class VendingMachine {
     private ArrayList<Integer> coinChanger;
     private ArrayList<Integer> coinSlot;
     private ArrayList<SoftDrinkSlot> softDrinkSlots;
+
+    /**
+     * Instantiates a new Vending machine.
+     * With 3 components, coinChanger, coinSlot and softDrinkSlots
+     */
     public VendingMachine() {
         coinChanger = new ArrayList<Integer>();
         coinSlot = new ArrayList<Integer>();
         softDrinkSlots = new ArrayList<SoftDrinkSlot>();
     }
+
+    /**
+     * Add coin to coin changer.
+     *
+     * @param c The face value of the coin to be added to the coin changer.
+     */
     public void addCoinToCoinChanger(Integer c) {
         coinChanger.add(c);
     }
+
+    /**
+     * Add new soft drink slot.
+     *
+     * @param s the SoftDrinkSlot object to be added to the ArrayList.
+     */
     public void addSoftDrinkSlot(SoftDrinkSlot s) {
         softDrinkSlots.add(s);
     }
-/* You may add other non-static properties and methods */
+
+    /**
+     * Add coin to coin slot when customer insert a coin.
+     *
+     * @param c the face value of the inserted coin.
+     * @return the total value of the coins currently in the coinSlot.
+     */
+    /* You may add other non-static properties and methods */
     public Integer addCoinToCoinSlot(Integer c) {
         coinSlot.add(c);
         Collections.sort(coinSlot);
@@ -56,6 +85,12 @@ public class VendingMachine {
         else
             return "Insufficient change!";
     }
+
+    /**
+     * Reject all coins from the coin slot.
+     *
+     * @return the response of the machine, the value of coins and the total value rejected.
+     */
     public String rejectCoinFromCoinSlot(){
         String response;
         if (coinSlot.size()==0){
@@ -72,6 +107,15 @@ public class VendingMachine {
         coinSlot.clear();
         return response;
     }
+
+    /**
+     * Purchase soft drink with the given product name,
+     * if stock is available and enough coins inserted and enough changes
+     *
+     * @param product the name of the product
+     * @return the response of the machine, either successful with/without changes or insufficient amount of coins
+     * or insufficient changes.
+     */
     public String purchaseSoftDrinks(String product){
         boolean stock = false;
         int slot_index=-1;
