@@ -29,9 +29,6 @@ public class VendingMachine {
         }
         return sum;
     }
-    private void clearCoinSlot(){
-        coinSlot.clear();
-    }
     private String giveChange(Integer amount){
         ArrayList<Integer> changesBuffer = new ArrayList<Integer>();
         Collections.sort(coinChanger);
@@ -72,7 +69,7 @@ public class VendingMachine {
             Integer total = getCoinSlotValue();
             response = response.substring(0,response.length()-1) + ". $" + "" + total.toString() + " in Total.";
         }
-        clearCoinSlot();
+        coinSlot.clear();
         return response;
     }
     public String purchaseSoftDrinks(String product){
@@ -101,21 +98,22 @@ public class VendingMachine {
             return "Out of stock!";
         //Check if needed changes
         if(inserted_coin>price){
-            //Check if enough changes
+            //Gives the changes if possible
             String change_response = giveChange(inserted_coin-price);
             if (change_response.equals("Insufficient change!"))
                 return "Insufficient change!";
             else{
                 String response = "Success! Paid $" + inserted_coin.toString() + ". Change:" + change_response;
                 coinChanger.addAll(coinSlot);
-                clearCoinSlot();
+                coinSlot.clear();
+                softDrinkSlots.get(slot_index).buy();
                 return response;
             }
         }
         else{
             softDrinkSlots.get(slot_index).buy();
             coinChanger.addAll(coinSlot);
-            clearCoinSlot();
+            coinSlot.clear();
             return "Success! Paid $" + inserted_coin.toString() + ". No change.";
         }
     }
