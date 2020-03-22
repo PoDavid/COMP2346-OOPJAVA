@@ -35,4 +35,9 @@ public class User{
             }
         }
     }
+    public void editRecord(String hashedPassword, String fullname, String emailaddress){
+        this.hashedPassword = hashedPassword;
+        this.fullName = fullname;
+        this.emailAddress = emailaddress;
+    }
 }

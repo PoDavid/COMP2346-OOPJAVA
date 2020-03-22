@@ -24,20 +24,26 @@ public class AuthenticationSystem implements Hashing {
         return inputLine;
     }
 
-    public void authenticate() {
+    public String authenticate() {
         System.out.println("Please enter your username:");
         String username = getInput();
         System.out.println("Please enter your password:");
         String password = getInput();
         boolean usernameMatch = false;
+        boolean authenticated = false;
         for(User user : UserList){
             if(user.checkUsername(username)) {
                 usernameMatch = true;
                 user.checkPassword(hash(password));
+                authenticated = true;
             }
         }
         if(!usernameMatch)
             System.out.println("User not found!");
+        if (authenticated)
+            return username;
+        else
+            return null;
     }
 
     public void addUserRecord() {
@@ -62,6 +68,9 @@ public class AuthenticationSystem implements Hashing {
                         UserList.add(user);
                         System.out.println("Record added successfully!");
                     }
+                    else{
+                        System.out.println("Passwords do not match, no user added!");
+                    }
                     break;
                 }
             }
@@ -69,7 +78,33 @@ public class AuthenticationSystem implements Hashing {
     }
 
     public void editUserRecord() {
-
+        String username = authenticate();
+        if(!(username == null)){
+            while(true) {
+                System.out.println("Please enter your password:");
+                String password = getInput();
+                if (checkPassword(password)) {
+                    System.out.println("Please re-enter your password:");
+                    String re_password = getInput();
+                    if (checkRePassword(password, re_password)) {
+                        System.out.println("Please enter your full Name:");
+                        String fullname = getInput();
+                        System.out.println("Please enter your email address:");
+                        String emailaddress = getInput();
+                        String hashedPassword = hash(password);
+                        for(User user : UserList){
+                            if(user.checkUsername(username))
+                                user.editRecord(hashedPassword, fullname, emailaddress);
+                        }
+                        System.out.println("Record updated successfully!");
+                    }
+                    else{
+                        System.out.println("New passwords do not match, user record not edited!");
+                    }
+                    break;
+                }
+            }
+        }
     }
 
     private Boolean checkUsername(String username) {
@@ -92,12 +127,7 @@ public class AuthenticationSystem implements Hashing {
     }
 
     private Boolean checkRePassword(String password, String re_password) {
-        if (password.equals(re_password))
-            return true;
-        else {
-            System.out.println("Passwords do not match, no user added!");
-            return false;
-        }
+        return password.equals(re_password);
     }
 
     public String hash(String password) {
