@@ -7,13 +7,14 @@ import java.util.ArrayList;
 
 public class AuthenticationSystem implements Hashing {
     private ArrayList<User> UserList;
+    private BufferedReader input;
 
     AuthenticationSystem() {
         UserList = new ArrayList<>();
+        input = new BufferedReader(new InputStreamReader(System.in));
     }
 
     public String getInput() {
-        BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
         String inputLine = null;
         try {
             inputLine = input.readLine();
@@ -32,7 +33,7 @@ public class AuthenticationSystem implements Hashing {
         for(User user : UserList){
             if(user.checkUsername(username)) {
                 usernameMatch = true;
-                user.checkPassword(password);
+                user.checkPassword(hash(password));
             }
         }
         if(!usernameMatch)
@@ -43,22 +44,25 @@ public class AuthenticationSystem implements Hashing {
         System.out.println("Please enter your username:");
         String username = getInput();
         if (checkUsername(username)) {
-            System.out.println("Please enter your password:");
-            String password = getInput();
-            if (checkPassword(password)) {
-                System.out.println("Please re-enter your password:");
-                String re_password = getInput();
-                if (checkRePassword(password, re_password)) {
-                    System.out.println("Please enter your full name:");
-                    String fullname = getInput();
-                    System.out.println("Please enter your email address:");
-                    String emailaddress = getInput();
-                    System.out.println("Please enter your phone number:");
-                    String phonenumber = getInput();
-                    String hashedPassword = hash(password);
-                    User user = new User(username, hashedPassword, fullname, emailaddress, phonenumber);
-                    UserList.add(user);
-                    System.out.println("Record added successfully!");
+            while(true) {
+                System.out.println("Please enter your password:");
+                String password = getInput();
+                if (checkPassword(password)) {
+                    System.out.println("Please re-enter your password:");
+                    String re_password = getInput();
+                    if (checkRePassword(password, re_password)) {
+                        System.out.println("Please enter your full Name:");
+                        String fullname = getInput();
+                        System.out.println("Please enter your email address:");
+                        String emailaddress = getInput();
+                        System.out.println("Please enter your phone number:");
+                        String phonenumber = getInput();
+                        String hashedPassword = hash(password);
+                        User user = new User(username, hashedPassword, fullname, emailaddress, phonenumber);
+                        UserList.add(user);
+                        System.out.println("Record added successfully!");
+                    }
+                    break;
                 }
             }
         }
@@ -82,7 +86,7 @@ public class AuthenticationSystem implements Hashing {
         if (password.length() >= 6 && password.matches("(?=.*[0-9]).*") && password.matches("(?=.*[a-z]).*") && password.matches("(?=.*[A-Z]).*"))
             return true;
         else {
-            System.out.println("Your password has to fulfill: at least 6 characters, 1 small letter, 1 capital letter, 1 digit!");
+            System.out.println("Your password has to fulfil: at least 6 characters, 1 small letter, 1 capital letter, 1 digit!");
             return false;
         }
     }
