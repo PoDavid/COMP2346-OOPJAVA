@@ -1,4 +1,15 @@
+/**
+ * The Main class, used to drive the program.
+ *
+ * @author Po Yat Ching David UID:3035372098
+ */
 public class Main {
+    /**
+     * Main, the entry point of the program.
+     * Runs the main loop of the program.
+     *
+     * @param args the system input
+     */
     public static void main(String[] args){
         AuthenticationSystem authenticationSystem = new AuthenticationSystem();
         int option;

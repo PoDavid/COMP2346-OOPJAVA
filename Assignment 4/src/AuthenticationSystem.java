@@ -5,15 +5,27 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
+/**
+ * The Authentication system class, used to model the authentication system.
+ * @author Po Yat Ching David UID:3035372098
+ */
 public class AuthenticationSystem implements Hashing {
     private ArrayList<User> UserList;
     private BufferedReader input;
 
+    /**
+     * Instantiates a new Authentication system.
+     */
     AuthenticationSystem() {
         UserList = new ArrayList<>();
         input = new BufferedReader(new InputStreamReader(System.in));
     }
 
+    /**
+     * Gets User input.
+     *
+     * @return the choice of the user 0-3
+     */
     public String getInput() {
         String inputLine = null;
         try {
@@ -24,6 +36,11 @@ public class AuthenticationSystem implements Hashing {
         return inputLine;
     }
 
+    /**
+     * Perform the authenticate option by the given username and password
+     *
+     * @return the authenticated user's username or null if username and password does not match
+     */
     public String authenticate() {
         System.out.println("Please enter your username:");
         String username = getInput();
@@ -34,8 +51,8 @@ public class AuthenticationSystem implements Hashing {
         for(User user : UserList){
             if(user.checkUsername(username)) {
                 usernameMatch = true;
-                user.checkPassword(hash(password));
-                authenticated = true;
+                if(user.checkPassword(hash(password)))
+                    authenticated = true;
             }
         }
         if(!usernameMatch)
@@ -46,6 +63,11 @@ public class AuthenticationSystem implements Hashing {
             return null;
     }
 
+    /**
+     * Perform the add new user record option.
+     * Get the related information from user
+     * Create a new user record by the given user information
+     */
     public void addUserRecord() {
         System.out.println("Please enter your username:");
         String username = getInput();
@@ -77,26 +99,31 @@ public class AuthenticationSystem implements Hashing {
         }
     }
 
+    /**
+     * Perform the edit user record's information option.
+     * Perform authentication using the user's provided username and password.
+     * If authenticated, allow modification of the user record.
+     */
     public void editUserRecord() {
         String username = authenticate();
         if(!(username == null)){
             while(true) {
-                System.out.println("Please enter your password:");
+                System.out.println("Please enter your new password:");
                 String password = getInput();
                 if (checkPassword(password)) {
-                    System.out.println("Please re-enter your password:");
+                    System.out.println("Please re-enter your new password:");
                     String re_password = getInput();
                     if (checkRePassword(password, re_password)) {
-                        System.out.println("Please enter your full Name:");
+                        System.out.println("Please enter your new full name:");
                         String fullname = getInput();
-                        System.out.println("Please enter your email address:");
+                        System.out.println("Please enter your new email address:");
                         String emailaddress = getInput();
                         String hashedPassword = hash(password);
                         for(User user : UserList){
                             if(user.checkUsername(username))
                                 user.editRecord(hashedPassword, fullname, emailaddress);
                         }
-                        System.out.println("Record updated successfully!");
+                        System.out.println("Record update successfully!");
                     }
                     else{
                         System.out.println("New passwords do not match, user record not edited!");
@@ -130,6 +157,12 @@ public class AuthenticationSystem implements Hashing {
         return password.equals(re_password);
     }
 
+    /**
+     * Hash the given plaintext password to hashed password.
+     *
+     * @param password the plaintext password
+     * @return the hashed password
+     */
     public String hash(String password) {
         MessageDigest messageDigest;
         String hashedPassword = null;
