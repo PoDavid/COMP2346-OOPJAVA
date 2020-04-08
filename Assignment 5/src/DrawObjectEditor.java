@@ -14,7 +14,8 @@ public class DrawObjectEditor extends JFrame {
     JButton jb_del;
     JButton jb_cop;
     JButton jb_ran;
-    boolean drawline;
+    boolean drawLine;
+    boolean drawCircle;
     boolean first_click=false;
     double x1;
     double y1;
@@ -37,20 +38,35 @@ public class DrawObjectEditor extends JFrame {
         jp_draw.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                if(drawline && !first_click){
+                if(drawLine && !first_click){
                     x1=e.getX();
                     y1=e.getY();
-                    jp_draw.drawDot(x1,y1);
+                    jp_draw.addDot(x1,y1);
                     first_click=true;
                 }
-                else if(drawline){
+                else if(drawLine){
                     x2=e.getX();
                     y2=e.getY();
-                    drawline=false;
+                    drawLine=false;
                     first_click=false;
                     jb_lin.setEnabled(true);
                     jb_lin.setBackground(null);
                     jp_draw.addLine(x1,y1,x2,y2);
+                }
+                if(drawCircle && !first_click){
+                    x1=e.getX();
+                    y1=e.getY();
+                    jp_draw.addDot(x1,y1);
+                    first_click=true;
+                }
+                else if(drawCircle){
+                    x2=e.getX();
+                    y2=e.getY();
+                    drawCircle=false;
+                    first_click=false;
+                    jb_cir.setEnabled(true);
+                    jb_cir.setBackground(null);
+                    jp_draw.addCircle(x1,y1,x2,y2);
                 }
             }
         });
@@ -104,7 +120,7 @@ public class DrawObjectEditor extends JFrame {
         public void actionPerformed(ActionEvent e) {
             jb_lin.setEnabled(false);
             jb_lin.setBackground(Color.gray);
-            drawline=true;
+            drawLine=true;
         }
     }
     class CircleListener implements ActionListener {
@@ -112,6 +128,7 @@ public class DrawObjectEditor extends JFrame {
         public void actionPerformed(ActionEvent e) {
             jb_cir.setEnabled(false);
             jb_cir.setBackground(Color.gray);
+            drawCircle=true;
         }
     }
     class TriangleListener implements ActionListener {
