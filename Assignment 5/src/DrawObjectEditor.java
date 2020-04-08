@@ -16,11 +16,17 @@ public class DrawObjectEditor extends JFrame {
     JButton jb_ran;
     boolean drawLine;
     boolean drawCircle;
+    boolean drawTriangle;
+    boolean drawQuad;
     boolean first_click=false;
+    boolean second_click=false;
+    boolean third_click=false;
     double x1;
     double y1;
     double x2;
     double y2;
+    int[]x=new int[4];
+    int[]y=new int[4];
     public DrawObjectEditor() {
         super("Draw Object Editor");
     }
@@ -38,6 +44,7 @@ public class DrawObjectEditor extends JFrame {
         jp_draw.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
+                //Draw Line
                 if(drawLine && !first_click){
                     x1=e.getX();
                     y1=e.getY();
@@ -53,6 +60,7 @@ public class DrawObjectEditor extends JFrame {
                     jb_lin.setBackground(null);
                     jp_draw.addLine(x1,y1,x2,y2);
                 }
+                //Draw Circle
                 if(drawCircle && !first_click){
                     x1=e.getX();
                     y1=e.getY();
@@ -68,6 +76,74 @@ public class DrawObjectEditor extends JFrame {
                     jb_cir.setBackground(null);
                     jp_draw.addCircle(x1,y1,x2,y2);
                 }
+                //Draw Triangle
+                if(drawTriangle && !first_click ){
+                    x1=e.getX();
+                    y1=e.getY();
+                    jp_draw.addDot(x1,y1);
+                    x[0] = (int) x1;
+                    y[0] = (int) y1;
+                    first_click=true;
+                }
+                else if(drawTriangle && !second_click ){
+                    x1=e.getX();
+                    y1=e.getY();
+                    jp_draw.addDot(x1,y1);
+                    x[1]= (int) x1;
+                    y[1]= (int) y1;
+                    second_click=true;
+                }
+                else if (drawTriangle){
+                    x1=e.getX();
+                    y1=e.getY();
+                    x[2]= (int) x1;
+                    y[2]= (int) y1;
+                    drawTriangle=false;
+                    first_click=false;
+                    second_click=false;
+                    jb_qua.setEnabled(true);
+                    jb_qua.setBackground(null);
+                    jp_draw.addQuadrilateral(x,y,3);
+                }
+                //Draw Quadrilateral
+                if(drawQuad && !first_click ){
+                    x1=e.getX();
+                    y1=e.getY();
+                    jp_draw.addDot(x1,y1);
+                    x[0] = (int) x1;
+                    y[0] = (int) y1;
+                    first_click=true;
+                }
+                else if(drawQuad && !second_click ){
+                    x1=e.getX();
+                    y1=e.getY();
+                    jp_draw.addDot(x1,y1);
+                    x[1]= (int) x1;
+                    y[1]= (int) y1;
+                    second_click=true;
+                }
+                else if (drawQuad && !third_click ){
+                    x1=e.getX();
+                    y1=e.getY();
+                    jp_draw.addDot(x1,y1);
+                    x[2]= (int) x1;
+                    y[2]= (int) y1;
+                    third_click=true;
+                }
+                else if(drawQuad){
+                    x1=e.getX();
+                    y1=e.getY();
+                    x[3]= (int) x1;
+                    y[3]= (int) y1;
+                    drawQuad=false;
+                    first_click=false;
+                    second_click=false;
+                    third_click=false;
+                    jb_qua.setEnabled(true);
+                    jb_qua.setBackground(null);
+                    jp_draw.addQuadrilateral(x,y,4);
+                }
+
             }
         });
         JPanel jp_buttons = new JPanel();
@@ -136,6 +212,7 @@ public class DrawObjectEditor extends JFrame {
         public void actionPerformed(ActionEvent e) {
             jb_tri.setEnabled(false);
             jb_tri.setBackground(Color.gray);
+            drawTriangle=true;
         }
     }
     class QuadrilateralListener implements ActionListener {
@@ -143,6 +220,7 @@ public class DrawObjectEditor extends JFrame {
         public void actionPerformed(ActionEvent e) {
             jb_qua.setEnabled(false);
             jb_qua.setBackground(Color.gray);
+            drawQuad=true;
         }
     }
 }
