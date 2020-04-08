@@ -18,7 +18,6 @@ public class DrawObjectEditor extends JFrame {
     boolean drawTriangle;
     boolean drawQuad;
     boolean select;
-    boolean delete;
     boolean first_click;
     boolean second_click;
     boolean third_click;
@@ -83,7 +82,7 @@ public class DrawObjectEditor extends JFrame {
         jb_del.addActionListener(new DeleteListener());
 
         jb_cop = new JButton("Copy");
-        //jb_cop.addActionListener(new LineListener());
+        jb_cop.addActionListener(new CopyListener());
 
         jb_ran = new JButton("Random Color");
         //jb_ran.addActionListener(new LineListener());
@@ -277,6 +276,25 @@ public class DrawObjectEditor extends JFrame {
             jb_sel.setEnabled(false);
             jb_sel.setBackground(Color.gray);
             jp_draw.delete();
+
+            jb_sel.setEnabled(true);
+            jb_sel.setBackground(null);
+            jb_mov.setEnabled(false);
+            jb_del.setEnabled(false);
+            jb_cop.setEnabled(false);
+            jb_ran.setEnabled(false);
+            jb_mov.setBackground(Color.gray);
+            jb_del.setBackground(Color.gray);
+            jb_cop.setBackground(Color.gray);
+            jb_ran.setBackground(Color.gray);
+        }
+    }
+    class CopyListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            jb_sel.setEnabled(false);
+            jb_sel.setBackground(Color.gray);
+            jp_draw.copy();
 
             jb_sel.setEnabled(true);
             jb_sel.setBackground(null);

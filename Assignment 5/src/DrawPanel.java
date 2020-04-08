@@ -21,7 +21,6 @@ public class DrawPanel extends JPanel {
                 g2.setColor(Color.green);
                 selected = 0;
                 selectedObject = i;
-                select=false;
             }
             else
                 g2.setColor(Color.black);
@@ -32,7 +31,6 @@ public class DrawPanel extends JPanel {
                 g2.setColor(Color.green);
                 selected = 1;
                 selectedObject = i;
-                select=false;
             }
             else
                 g2.setColor(Color.black);
@@ -43,7 +41,6 @@ public class DrawPanel extends JPanel {
                 g2.setColor(Color.green);
                 selected = 2;
                 selectedObject = i;
-                select=false;
             }
             else
                 g2.setColor(Color.black);
@@ -54,7 +51,6 @@ public class DrawPanel extends JPanel {
                 g2.setColor(Color.green);
                 selected = 3;
                 selectedObject = i;
-                select=false;
             }
             else
                 g2.setColor(Color.black);
@@ -124,9 +120,43 @@ public class DrawPanel extends JPanel {
         else if (selected==3){
             quads.remove(selectedObject);
         }
+        select=false;
         repaint();
     }
-    public boolean getSelected(){
-        return selected != -1;
+    public void copy(){
+        if (selected==0){
+            Line2D.Double line = lines.get(selectedObject);
+            Line2D.Double copy_line = new Line2D.Double(line.x1+=30,line.y1+=30,line.x2+=30,line.y2+=30);
+            lines.add(copy_line);
+        }
+        else if (selected==1){
+            Ellipse2D.Double circle = circles.get(selectedObject);
+            Ellipse2D.Double copy_circle = new Ellipse2D.Double(circle.x+30,circle.y+30,circle.width,circle.height);
+            circles.add(copy_circle);
+        }
+        else if (selected==2){
+            Polygon triangle = triangles.get(selectedObject);
+            int[] x = new int[3];
+            int[] y = new int[3];
+            for(int i=0;i<3;i++){
+                x[i]=triangle.xpoints[i]+30;
+                y[i]=triangle.ypoints[i]+30;
+            }
+            Polygon copy_triangle = new Polygon(x,y,3);
+            triangles.add(copy_triangle);
+        }
+        else if (selected==3){
+            Polygon quad = quads.get(selectedObject);
+            int[] x = new int[4];
+            int[] y = new int[4];
+            for(int i=0;i<4;i++){
+                x[i]=quad.xpoints[i]+30;
+                y[i]=quad.ypoints[i]+30;
+            }
+            Polygon copy_quad = new Polygon(x,y,4);
+            triangles.add(copy_quad);
+        }
+        select=false;
+        repaint();
     }
 }
