@@ -1,6 +1,5 @@
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.geom.Line2D;
 import javax.swing.*;
 
 public class DrawObjectEditor extends JFrame {
@@ -19,6 +18,7 @@ public class DrawObjectEditor extends JFrame {
     boolean drawTriangle;
     boolean drawQuad;
     boolean select;
+    boolean delete;
     boolean first_click;
     boolean second_click;
     boolean third_click;
@@ -53,6 +53,9 @@ public class DrawObjectEditor extends JFrame {
                     drawTriangle(e);
                 else if (drawQuad)
                     drawQuad(e);
+                else if (select) {
+                    select(e);
+                }
             }
         });
         JPanel jp_buttons = new JPanel();
@@ -71,13 +74,13 @@ public class DrawObjectEditor extends JFrame {
         jb_qua.addActionListener(new QuadrilateralListener());
 
         jb_sel = new JButton("Select");
-        //jb_sel.addActionListener(new LineListener());
+        jb_sel.addActionListener(new SelectListener());
 
         jb_mov = new JButton("Move");
         //jb_mov.addActionListener(new LineListener());
 
         jb_del = new JButton("Delete");
-        //jb_del.addActionListener(new LineListener());
+        jb_del.addActionListener(new DeleteListener());
 
         jb_cop = new JButton("Copy");
         //jb_cop.addActionListener(new LineListener());
@@ -97,6 +100,16 @@ public class DrawObjectEditor extends JFrame {
 
         jp_buttons.setLayout(new GridLayout(3, 3, 0, 0));
         getContentPane().add(BorderLayout.SOUTH, jp_buttons);
+
+        jb_mov.setEnabled(false);
+        jb_del.setEnabled(false);
+        jb_cop.setEnabled(false);
+        jb_ran.setEnabled(false);
+
+        jb_mov.setBackground(Color.gray);
+        jb_del.setBackground(Color.gray);
+        jb_cop.setBackground(Color.gray);
+        jb_ran.setBackground(Color.gray);
 
         setVisible(true);
     }
@@ -235,12 +248,46 @@ public class DrawObjectEditor extends JFrame {
             jp_draw.addQuadrilateral(x,y,4);
         }
     }
-    class selectListener implements ActionListener {
+    class SelectListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             jb_sel.setEnabled(false);
             jb_sel.setBackground(Color.gray);
             select=true;
+        }
+    }
+    public void select(MouseEvent e){
+        x1=e.getX();
+        y1=e.getY();
+        if (jp_draw.checkContains(x1,y1)){
+            select=false;
+            jb_mov.setEnabled(true);
+            jb_del.setEnabled(true);
+            jb_cop.setEnabled(true);
+            jb_ran.setEnabled(true);
+            jb_mov.setBackground(null);
+            jb_del.setBackground(null);
+            jb_cop.setBackground(null);
+            jb_ran.setBackground(null);
+        }
+    }
+    class DeleteListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            jb_sel.setEnabled(false);
+            jb_sel.setBackground(Color.gray);
+            jp_draw.delete();
+
+            jb_sel.setEnabled(true);
+            jb_sel.setBackground(null);
+            jb_mov.setEnabled(false);
+            jb_del.setEnabled(false);
+            jb_cop.setEnabled(false);
+            jb_ran.setEnabled(false);
+            jb_mov.setBackground(Color.gray);
+            jb_del.setBackground(Color.gray);
+            jb_cop.setBackground(Color.gray);
+            jb_ran.setBackground(Color.gray);
         }
     }
 }
