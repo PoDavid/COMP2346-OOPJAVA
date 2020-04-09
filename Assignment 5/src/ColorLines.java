@@ -8,15 +8,11 @@ public class ColorLines {
     ColorLines(){
         lines = new ArrayList<>();
         colors = new ArrayList<>();
-        fillColors = new ArrayList<>();
     }
     public ArrayList<Line2D.Double> getLine(){
         return lines;
     }
     public ArrayList<Color> getColor(){
         return colors;
-    }
-    public ArrayList<Color> getFillColor(){
-        return fillColors;
     }
 }
