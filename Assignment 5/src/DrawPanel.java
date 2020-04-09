@@ -3,6 +3,10 @@ import java.awt.*;
 import java.awt.geom.*;
 import java.util.Random;
 
+/**
+ * The Draw Panel class, used to model the Canvas in the Object Editor.
+ * @author Po Yat Ching David UID:3035372098
+ */
 public class DrawPanel extends JPanel {
     private ColorLines lines = new ColorLines();
     private ColorCircles circles = new ColorCircles();
@@ -66,6 +70,15 @@ public class DrawPanel extends JPanel {
             g2.draw(quads.getQuads().get(i));
         }
     }
+
+    /**
+     * Add a black line in the specified position.
+     *
+     * @param x1 the x coordinate of the first point
+     * @param y1 the y coordinate of the second point
+     * @param x2 the x coordinate of the first point
+     * @param y2 the y coordinate of the second point
+     */
     public void addLine(double x1,double y1, double x2, double y2){
         lines.getLine().remove(lines.getLine().size()-1); //remove the dot
         lines.getColor().remove(lines.getColor().size()-1);
@@ -74,11 +87,27 @@ public class DrawPanel extends JPanel {
         lines.getColor().add(Color.black);
         repaint();
     }
+
+    /**
+     * Add a dot in the specified position.
+     *
+     * @param x1 the x coordinate of the dot.
+     * @param y1 the y coordinate of the dot.
+     */
     public void addDot(double x1,double y1){
         lines.getLine().add(new Line2D.Double(x1,y1,x1,y1));
         lines.getColor().add(Color.black);
         repaint();
     }
+
+    /**
+     * Add a circle in the specified position.
+     *
+     * @param x1 the x coordinate of the first click
+     * @param y1 the y coordinate of the first click
+     * @param x2 the x coordinate of the second click
+     * @param y2 the y coordinate of the second click
+     */
     public void addCircle(double x1,double y1, double x2, double y2){
         lines.getLine().remove(lines.getLine().size()-1); //remove the dot
         lines.getColor().remove(lines.getColor().size()-1);
@@ -90,6 +119,14 @@ public class DrawPanel extends JPanel {
         circles.getFillColor().add(new Color(238,238,238));
         repaint();
     }
+
+    /**
+     * Add a triangle/quadrilateral in the specified position.
+     *
+     * @param x the list of x coordinate of the points.
+     * @param y the list of y coordinate of the points.
+     * @param n the the number of points (3 for triangle, 4 for quadrilateral).
+     */
     public void addQuadrilateral(int[]x,int[]y,int n){
         for(int i=0;i<n-1;i++){
             lines.getLine().remove(lines.getLine().size()-1);
@@ -107,6 +144,14 @@ public class DrawPanel extends JPanel {
         }
         repaint();
     }
+
+    /**
+     * Check if the given point contains in any of the object.
+     *
+     * @param x the x coordinate of the point.
+     * @param y the y coordinate of the point.
+     * @return the boolean of whether the point contains in any of the object or not.
+     */
     public boolean checkContains(double x,double y){
         p = new Point((int)x,(int)y);
         select = true;
@@ -130,6 +175,14 @@ public class DrawPanel extends JPanel {
         }
         return false;
     }
+
+    /**
+     * Check if the given point contains in the selected object.
+     *
+     * @param x the x
+     * @param y the y
+     * @return the boolean of whether the given point contains in the selected object or not.
+     */
     public boolean movePressed(double x, double y){
         p = new Point((int)x,(int)y);
         move_x=x;
@@ -148,6 +201,13 @@ public class DrawPanel extends JPanel {
         }
         return movepressed;
     }
+
+    /**
+     * Move the selected object to the specified position.
+     *
+     * @param x the x coordinate of the new position.
+     * @param y the y coordinate of the new position.
+     */
     public void moveReleased(double x,double y){
         if (selected==0){
             Line2D.Double newLine = lines.getLine().get(selectedObject);
@@ -189,6 +249,10 @@ public class DrawPanel extends JPanel {
         }
         repaint();
     }
+
+    /**
+     * Delete the selected object.
+     */
     public void delete(){
         if (selected==0){
             lines.getLine().remove(selectedObject);
@@ -211,6 +275,10 @@ public class DrawPanel extends JPanel {
         }
         repaint();
     }
+
+    /**
+     * Copy the selected object.
+     */
     public void copy(){
         if (selected==0){
             Line2D.Double line = lines.getLine().get(selectedObject);
@@ -257,6 +325,10 @@ public class DrawPanel extends JPanel {
         }
         repaint();
     }
+
+    /**
+     * Fill the selected object with a random color.
+     */
     public void random(){
         Random rand = new Random();
         float r = rand.nextFloat();
