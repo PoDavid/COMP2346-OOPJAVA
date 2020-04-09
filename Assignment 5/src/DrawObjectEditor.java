@@ -95,7 +95,7 @@ public class DrawObjectEditor extends JFrame {
         jb_cop.addActionListener(new CopyListener());
 
         jb_ran = new JButton("Random Color");
-        //jb_ran.addActionListener(new LineListener());
+        jb_ran.addActionListener(new RandListener());
 
         jp_buttons.add(jb_lin);
         jp_buttons.add(jb_cir);
@@ -347,6 +347,25 @@ public class DrawObjectEditor extends JFrame {
             jb_sel.setEnabled(false);
             jb_sel.setBackground(Color.gray);
             jp_draw.copy();
+
+            jb_sel.setEnabled(true);
+            jb_sel.setBackground(null);
+            jb_mov.setEnabled(false);
+            jb_del.setEnabled(false);
+            jb_cop.setEnabled(false);
+            jb_ran.setEnabled(false);
+            jb_mov.setBackground(Color.gray);
+            jb_del.setBackground(Color.gray);
+            jb_cop.setBackground(Color.gray);
+            jb_ran.setBackground(Color.gray);
+        }
+    }
+    class RandListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            jb_sel.setEnabled(false);
+            jb_sel.setBackground(Color.gray);
+            jp_draw.random();
 
             jb_sel.setEnabled(true);
             jb_sel.setBackground(null);

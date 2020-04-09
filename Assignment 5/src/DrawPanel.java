@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.*;
+import java.util.Random;
 
 public class DrawPanel extends JPanel {
     private ColorLines lines = new ColorLines();
@@ -253,6 +254,26 @@ public class DrawPanel extends JPanel {
             quads.getQuads().add(copy_quad);
             quads.getColor().add(Color.black);
             quads.getFillColor().add(quads.getFillColor().get(selectedObject));
+        }
+        repaint();
+    }
+    public void random(){
+        Random rand = new Random();
+        float r = rand.nextFloat();
+        float g = rand.nextFloat();
+        float b = rand.nextFloat();
+        Color randColor = new Color(r,g,b);
+        if(selected==1){
+            circles.getFillColor().set(selectedObject,randColor);
+            circles.getColor().set(selectedObject,Color.black);
+        }
+        else if(selected==2){
+            triangles.getFillColor().set(selectedObject,randColor);
+            triangles.getColor().set(selectedObject,Color.black);
+        }
+        else if(selected==3){
+            quads.getFillColor().set(selectedObject,randColor);
+            quads.getColor().set(selectedObject,Color.black);
         }
         repaint();
     }
