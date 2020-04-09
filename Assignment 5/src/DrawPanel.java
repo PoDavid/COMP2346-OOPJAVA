@@ -1,7 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.*;
-import java.util.ArrayList;
 
 public class DrawPanel extends JPanel {
     private ColorLines lines = new ColorLines();
@@ -9,7 +8,10 @@ public class DrawPanel extends JPanel {
     private ColorTriangles triangles = new ColorTriangles();
     private ColorQuads quads = new ColorQuads();
     private Point p;
+    private double move_x;
+    private double move_y;
     private boolean select;
+    private  boolean movepressed;
     private int selected=-1;
     private int selectedObject;
     public void paintComponent(Graphics g) {
@@ -21,6 +23,7 @@ public class DrawPanel extends JPanel {
                 lines.getColor().set(i,Color.green);
                 selected = 0;
                 selectedObject = i;
+                select=false;
             }
             g2.setColor(lines.getColor().get(i));
             g2.draw(lines.getLine().get(i));
@@ -30,6 +33,7 @@ public class DrawPanel extends JPanel {
                 circles.getColor().set(i,Color.green);
                 selected = 1;
                 selectedObject = i;
+                select=false;
             }
             g2.setColor(circles.getColor().get(i));
             g2.draw(circles.getCircle().get(i));
@@ -39,6 +43,7 @@ public class DrawPanel extends JPanel {
                 triangles.getColor().set(i,Color.green);
                 selected = 2;
                 selectedObject = i;
+                select=false;
             }
             g2.setColor(triangles.getColor().get(i));
             g2.draw(triangles.getTriangles().get(i));
@@ -48,6 +53,7 @@ public class DrawPanel extends JPanel {
                 quads.getColor().set(i,Color.green);
                 selected = 3;
                 selectedObject = i;
+                select=false;
             }
             g2.setColor(quads.getColor().get(i));
             g2.draw(quads.getQuads().get(i));
@@ -105,6 +111,14 @@ public class DrawPanel extends JPanel {
                 return true;
         }
         for (Polygon triangle : triangles.getTriangles()) {
+            System.out.println("Triangle to be tested:");
+            for(int i=0;i<3;i++){
+               System.out.println(triangle.xpoints[i]);
+               System.out.println(triangle.ypoints[i]);
+            }
+            System.out.println("Point to be tested:");
+            System.out.println(p);
+
             if (triangle.contains(p))
                 return true;
         }
@@ -113,6 +127,66 @@ public class DrawPanel extends JPanel {
                 return true;
         }
         return false;
+    }
+    public boolean movePressed(double x, double y){
+        p = new Point((int)x,(int)y);
+        move_x=x;
+        move_y=y;
+        if(selected==0){
+            movepressed=lines.getLine().get(selectedObject).contains(p);
+        }
+        else if(selected==1){
+            movepressed=circles.getCircle().get(selectedObject).contains(p);
+        }
+        else if(selected==2){
+            System.out.println("HI");
+            movepressed=triangles.getTriangles().get(selectedObject).contains(p);
+        }
+        else if(selected==3){
+            movepressed=quads.getQuads().get(selectedObject).contains(p);
+        }
+        return movepressed;
+    }
+    public void moveReleased(double x,double y){
+        if (selected==0){
+            Line2D.Double newLine = lines.getLine().get(selectedObject);
+            newLine.x1+=x-move_x;
+            newLine.x2+=x-move_x;
+            newLine.y1+=y-move_y;
+            newLine.y2+=y-move_y;
+            lines.getLine().set(selectedObject,newLine);
+            lines.getColor().set(selectedObject,Color.black);
+        }
+        else if (selected==1){
+            Ellipse2D.Double newCircle = circles.getCircle().get(selectedObject);
+            newCircle.x+=x-move_x;
+            newCircle.y+=y-move_y;
+            circles.getCircle().set(selectedObject,newCircle);
+            circles.getColor().set(selectedObject,Color.black);
+        }
+        else if (selected==2){
+            Polygon oldTriangles = triangles.getTriangles().get(selectedObject);
+            int[]newX=new int[3];
+            int[]newY=new int[3];
+            for(int i=0;i<3;i++){
+                newX[i]=oldTriangles.xpoints[i]+(int)(x-move_x);
+                newY[i]=oldTriangles.ypoints[i]+(int)(y-move_y);
+            }
+            triangles.getTriangles().set(selectedObject,new Polygon(newX,newY,3));
+            triangles.getColor().set(selectedObject,Color.black);
+        }
+        else if (selected==3){
+            Polygon oldQuads = quads.getQuads().get(selectedObject);
+            int[]newX=new int[4];
+            int[]newY=new int[4];
+            for(int i=0;i<4;i++){
+                newX[i]=oldQuads.xpoints[i]+(int)(x-move_x);
+                newY[i]=oldQuads.ypoints[i]+(int)(y-move_y);
+            }
+            quads.getQuads().set(selectedObject,new Polygon(newX,newY,4));
+            quads.getColor().set(selectedObject,Color.black);
+        }
+        repaint();
     }
     public void delete(){
         if (selected==0){
@@ -131,7 +205,6 @@ public class DrawPanel extends JPanel {
             quads.getQuads().remove(selectedObject);
             quads.getColor().remove(selectedObject);
         }
-        select=false;
         repaint();
     }
     public void copy(){
@@ -175,7 +248,6 @@ public class DrawPanel extends JPanel {
             quads.getQuads().add(copy_quad);
             quads.getColor().add(Color.black);
         }
-        select=false;
         repaint();
     }
 }

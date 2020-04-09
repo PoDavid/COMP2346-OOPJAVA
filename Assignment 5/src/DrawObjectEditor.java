@@ -18,6 +18,8 @@ public class DrawObjectEditor extends JFrame {
     boolean drawTriangle;
     boolean drawQuad;
     boolean select;
+    boolean move;
+    boolean movePressed;
     boolean first_click;
     boolean second_click;
     boolean third_click;
@@ -43,7 +45,7 @@ public class DrawObjectEditor extends JFrame {
         jp_draw.setSize(400, 450);
         jp_draw.addMouseListener(new MouseAdapter() {
             @Override
-            public void mousePressed(MouseEvent e) {
+            public void mouseClicked(MouseEvent e) {
                 if (drawLine)
                     drawLine(e);
                 else if (drawCircle)
@@ -55,6 +57,14 @@ public class DrawObjectEditor extends JFrame {
                 else if (select) {
                     select(e);
                 }
+            }
+            public void mousePressed(MouseEvent e){
+                if(move)
+                    movePressed(e);
+            }
+            public void mouseReleased(MouseEvent e){
+                if(movePressed)
+                    moveReleased(e);
             }
         });
         JPanel jp_buttons = new JPanel();
@@ -76,7 +86,7 @@ public class DrawObjectEditor extends JFrame {
         jb_sel.addActionListener(new SelectListener());
 
         jb_mov = new JButton("Move");
-        //jb_mov.addActionListener(new LineListener());
+        jb_mov.addActionListener(new MoveListener());
 
         jb_del = new JButton("Delete");
         jb_del.addActionListener(new DeleteListener());
@@ -269,6 +279,48 @@ public class DrawObjectEditor extends JFrame {
             jb_cop.setBackground(null);
             jb_ran.setBackground(null);
         }
+    }
+    class MoveListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            jb_sel.setEnabled(false);
+            jb_sel.setBackground(Color.gray);
+            move=true;
+
+            jb_sel.setEnabled(true);
+            jb_sel.setBackground(null);
+            jb_mov.setEnabled(false);
+            jb_del.setEnabled(false);
+            jb_cop.setEnabled(false);
+            jb_ran.setEnabled(false);
+            jb_mov.setBackground(Color.gray);
+            jb_del.setBackground(Color.gray);
+            jb_cop.setBackground(Color.gray);
+            jb_ran.setBackground(Color.gray);
+        }
+    }
+    public void movePressed(MouseEvent e){
+        x1 = e.getX();
+        y1 = e.getY();
+        movePressed=jp_draw.movePressed(x1,y1);
+    }
+    public void moveReleased(MouseEvent e){
+        x1 = e.getX();
+        y1 = e.getY();
+        jp_draw.moveReleased(x1,y1);
+        move=false;
+        movePressed=false;
+
+        jb_sel.setEnabled(true);
+        jb_sel.setBackground(null);
+        jb_mov.setEnabled(false);
+        jb_del.setEnabled(false);
+        jb_cop.setEnabled(false);
+        jb_ran.setEnabled(false);
+        jb_mov.setBackground(Color.gray);
+        jb_del.setBackground(Color.gray);
+        jb_cop.setBackground(Color.gray);
+        jb_ran.setBackground(Color.gray);
     }
     class DeleteListener implements ActionListener {
         @Override
