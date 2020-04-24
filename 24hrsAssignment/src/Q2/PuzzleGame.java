@@ -7,6 +7,10 @@ import java.io.File;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileSystemView;
 
+/**
+ * The PuzzleGame class, used to simulate the Puzzle Game.
+ * @author Po Yat Ching David UID:3035372098
+ */
 public class PuzzleGame extends JFrame{
     private ImagePanel jp_image;
     private Boolean firstClick=false;
@@ -14,13 +18,27 @@ public class PuzzleGame extends JFrame{
     private int y1;
     private int x2;
     private int y2;
+
+    /**
+     * Instantiates a new Puzzle game.
+     */
     public PuzzleGame(){
         super("Puzzle Game");
     }
+
+    /**
+     * The entry point of the application.
+     *
+     * @param args the input arguments
+     */
     public static void main(String[] args) {
         PuzzleGame game = new PuzzleGame();
         game.go();
     }
+
+    /**
+     * The driven program of the Puzzle Game
+     */
     public void go(){
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(550, 700);
@@ -89,6 +107,12 @@ public class PuzzleGame extends JFrame{
         setVisible(true);
         
     }
+
+    /**
+     * Present a file chooser to ask for an image file.
+     *
+     * @return the selected image file. File
+     */
     public File chooseFile(){
         JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
 
@@ -101,6 +125,11 @@ public class PuzzleGame extends JFrame{
         }
         return selectedFile;
     }
+
+    /**
+     * The Action listener for the Button Load New Image.
+     * Present file chooser and call the newImage() in jp_image.
+     */
     class NewListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -112,6 +141,11 @@ public class PuzzleGame extends JFrame{
             jp_image.newImage(selectedFile.getAbsolutePath());
         }
     }
+
+    /**
+     * The Action listener for the Button Save Game.
+     * Present file chooser and call the saveImage() in jp_image.
+     */
     class SaveListener implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -123,6 +157,11 @@ public class PuzzleGame extends JFrame{
             jp_image.saveImage(selectedFile.getPath());
         }
     }
+
+    /**
+     * The Action listener for the Button Load Game.
+     * Present file chooser and call the loadImage() in jp_image.
+     */
     class LoadListener implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -134,6 +173,11 @@ public class PuzzleGame extends JFrame{
             jp_image.loadImage(selectedFile.getPath());
         }
     }
+
+    /**
+     * The Action listener for the Button Show Original Game.
+     * Present file chooser and call the showImage() in jp_image.
+     */
     class ShowListener implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent e) {
