@@ -46,4 +46,10 @@ public class ColorQuads implements Serializable {
     public ArrayList<Color> getFillColor(){
         return fillColors;
     }
+
+    public void clear(){
+        quads.clear();
+        colors.clear();
+        fillColors.clear();
+    }
 }

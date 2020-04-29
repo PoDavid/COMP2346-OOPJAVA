@@ -47,4 +47,10 @@ public class ColorCircles implements Serializable {
     public ArrayList<Color> getFillColor(){
         return fillColors;
     }
+
+    public void clear(){
+        circles.clear();
+        colors.clear();
+        fillColors.clear();
+    }
 }

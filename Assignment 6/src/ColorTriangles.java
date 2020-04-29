@@ -46,4 +46,10 @@ public class ColorTriangles implements Serializable {
     public ArrayList<Color> getFillColor(){
         return fillColors;
     }
+
+    public void clear(){
+        triangles.clear();
+        colors.clear();
+        fillColors.clear();
+    }
 }

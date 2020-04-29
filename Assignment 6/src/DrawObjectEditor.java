@@ -115,7 +115,7 @@ public class DrawObjectEditor extends JFrame {
         jb_export.addActionListener(new ExportListener());
 
         jb_import = new JButton("Import");
-        //jb_save.addActionListener(new ImportListener());
+        jb_import.addActionListener(new ImportListener());
 
         jp_buttons.add(jb_lin);
         jp_buttons.add(jb_cir);
@@ -584,6 +584,17 @@ public class DrawObjectEditor extends JFrame {
                 return;
             }
             jp_draw.export(file.getPath());
+        }
+    }
+    class ImportListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            File file = chooseFile();
+            if (file == null){
+                System.out.println("No file selected.");
+                return;
+            }
+            jp_draw.importAscii(file.getPath());
         }
     }
 }
