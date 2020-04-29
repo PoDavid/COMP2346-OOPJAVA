@@ -37,6 +37,9 @@ public class ColorLines implements Serializable {
         return colors;
     }
 
+    /**
+     * Clear all the Arraylist in the class.
+     */
     public void clear(){
         lines.clear();
         colors.clear();

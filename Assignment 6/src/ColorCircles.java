@@ -48,6 +48,9 @@ public class ColorCircles implements Serializable {
         return fillColors;
     }
 
+    /**
+     * Clear all the Arraylist in the class.
+     */
     public void clear(){
         circles.clear();
         colors.clear();

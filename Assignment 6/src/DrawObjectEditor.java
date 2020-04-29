@@ -24,10 +24,6 @@ public class DrawObjectEditor extends JFrame {
     private JButton jb_del;
     private JButton jb_cop;
     private JButton jb_ran;
-    private JButton jb_save;
-    private JButton jb_load;
-    private JButton jb_export;
-    private JButton jb_import;
 
     private boolean drawLine;
     private boolean drawCircle;
@@ -105,16 +101,16 @@ public class DrawObjectEditor extends JFrame {
         jb_ran = new JButton("Random Color");
         jb_ran.addActionListener(new RandListener());
 
-        jb_save = new JButton("Save");
+        JButton jb_save = new JButton("Save");
         jb_save.addActionListener(new SaveListener());
 
-        jb_load = new JButton("Load");
+        JButton jb_load = new JButton("Load");
         jb_load.addActionListener(new LoadListener());
 
-        jb_export = new JButton("Export");
+        JButton jb_export = new JButton("Export");
         jb_export.addActionListener(new ExportListener());
 
-        jb_import = new JButton("Import");
+        JButton jb_import = new JButton("Import");
         jb_import.addActionListener(new ImportListener());
 
         jp_buttons.add(jb_lin);
@@ -146,7 +142,10 @@ public class DrawObjectEditor extends JFrame {
 
         setVisible(true);
     }
-
+    /**
+     * The MouseAdapter for the JPanel jp_draw
+     * Invoke the corresponding functions for handling mouse click events.
+     */
     public class PanelMouseAdapter extends MouseAdapter {
         @Override
         public void mouseClicked(MouseEvent e) {
@@ -172,6 +171,10 @@ public class DrawObjectEditor extends JFrame {
         }
     }
 
+    /**
+     * Display the file chooser.
+     * Return the File object selectedFile.
+     */
     public File chooseFile(){
         JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
 
@@ -532,6 +535,11 @@ public class DrawObjectEditor extends JFrame {
             jb_ran.setBackground(Color.gray);
         }
     }
+    /**
+     * The Action listener for the Button Save.
+     * Display the file chooser when clicked
+     * Save the DrawPanel object jp_draw to the selected file location.
+     */
     class SaveListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -550,6 +558,11 @@ public class DrawObjectEditor extends JFrame {
             }
         }
     }
+    /**
+     * The Action listener for the Button Load.
+     * Display the file chooser when clicked
+     * Load the DrawPanel object jp_draw from the selected file location.
+     */
     class LoadListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -575,6 +588,11 @@ public class DrawObjectEditor extends JFrame {
             }
         }
     }
+    /**
+     * The Action listener for the Button Export.
+     * Display the file chooser when clicked
+     * Call the export() function in DrawlPanel.
+     */
     class ExportListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -586,6 +604,11 @@ public class DrawObjectEditor extends JFrame {
             jp_draw.export(file.getPath());
         }
     }
+    /**
+     * The Action listener for the Button Import.
+     * Display the file chooser when clicked
+     * Call the importAscii() function in DrawlPanel.
+     */
     class ImportListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {

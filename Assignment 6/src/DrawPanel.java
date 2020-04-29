@@ -341,6 +341,10 @@ public class DrawPanel extends JPanel implements Serializable {
         repaint();
     }
 
+    /**
+     * Export the Geometric Shape information to the filepath in Ascii.
+     * @param filepath the filepath of the selected file
+     */
     public void export(String filepath) {
         try {
             OutputStreamWriter w = new OutputStreamWriter(new FileOutputStream(filepath));
@@ -392,6 +396,10 @@ public class DrawPanel extends JPanel implements Serializable {
         }
     }
 
+    /**
+     * Import the Geometric Shape information from the selected file in Ascii.
+     * @param filepath the filepath of the selected file
+     */
     public void importAscii(String filepath) {
         try {
             FileInputStream fis = new FileInputStream(filepath);
