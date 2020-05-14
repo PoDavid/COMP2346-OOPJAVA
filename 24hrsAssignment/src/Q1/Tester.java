@@ -7,15 +7,15 @@ public class Tester {
 
 	public static void main(String[] args) {
 		Tester t = new Tester();
-		t.add(new Fruit());
-		t.add(new Berry(3.7));
-		t.add(new Berry(4));
-		t.add(new Vitis(5.2));
-		t.add(new Berry(5));
+//		t.add(new Fruit());
+//		t.add(new Berry(3.7));
+//		t.add(new Berry(4));
+//		t.add(new Vitis(5.2));
+//		t.add(new Berry(5));
 		t.add(new Fragaria());
-		t.add(new Berry(6));
-		t.add(new Vitis(10));
-		t.add(new Fragaria());
+//		t.add(new Berry(6));
+//		t.add(new Vitis(10));
+//		t.add(new Fragaria());
 		t.start();
 		
 		System.out.println(t.getCount()+" fruits are juiced");

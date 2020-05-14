@@ -10,7 +10,6 @@ public class Fragaria extends Fruit{
 	 * Instantiates a new Fragaria.
 	 */
 	public Fragaria() {
-		super();
 	}
 	public String toString() {
 		return "a fragaria";
