@@ -9,10 +9,10 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 
 /**
- * The ImageSharingServer class, used to simulate the Puzzle Game.
+ * The ImageSharingSystem class, used to simulate the Puzzle Game.
  * @author Po Yat Ching David UID:3035372098
  */
-public class ImageSharingServer extends JFrame {
+public class ImageSharingSystem extends JFrame {
     private ImagePanel jp_image;
     private Boolean firstClick = false;
     private int x1;
@@ -23,7 +23,7 @@ public class ImageSharingServer extends JFrame {
     /**
      * Instantiates a new Puzzle game.
      */
-    public ImageSharingServer() {
+    public ImageSharingSystem() {
         super("Puzzle Game");
     }
 

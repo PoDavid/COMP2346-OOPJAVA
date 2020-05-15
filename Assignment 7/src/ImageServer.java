@@ -11,7 +11,7 @@ public class ImageServer {
 //        authSys.addUserRecord();
 //        authSys.saveRecord();
         authSys.loadRecord();
-        ImageSharingServer server = new ImageSharingServer();
+        ImageSharingSystem server = new ImageSharingSystem();
         server.go();
     }
 
