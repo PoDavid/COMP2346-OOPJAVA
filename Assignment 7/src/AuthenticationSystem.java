@@ -1,9 +1,8 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 /**
  * The Authentication system class, used to model the authentication system.
@@ -93,37 +92,6 @@ public class AuthenticationSystem implements Hashing {
         }
     }
 
-    /**
-     * Perform the edit user record's information option.
-     * Perform authentication using the user's provided username and password.
-     * If authenticated, allow modification of the user record.
-     */
-    public void editUserRecord() {
-        String username = authenticate();
-        if(!(username == null)){
-            while(true) {
-                System.out.println("Please enter your new password:");
-                String password = getInput();
-                if (checkPassword(password)) {
-                    System.out.println("Please re-enter your new password:");
-                    String re_password = getInput();
-                    if (checkRePassword(password, re_password)) {
-                        String hashedPassword = hash(password);
-                        for(User user : UserList){
-                            if(user.checkUsername(username))
-                                user.editRecord(hashedPassword);
-                        }
-                        System.out.println("Record update successfully!");
-                    }
-                    else{
-                        System.out.println("New passwords do not match, user record not edited!");
-                    }
-                    break;
-                }
-            }
-        }
-    }
-
     private Boolean checkUsername(String username) {
         for (User user : UserList) {
             if (user.checkUsername(username)) {
@@ -169,5 +137,43 @@ public class AuthenticationSystem implements Hashing {
             exception.printStackTrace();
         }
         return hashedPassword;
+    }
+    public void saveRecord(){
+        try{
+            File outputFile = new File("User.txt");
+            OutputStreamWriter w = new OutputStreamWriter(new FileOutputStream(outputFile));
+            String text;
+            for(User user : UserList){
+                text="";
+                text+="username:"+user.getUsername()+";hashPassword:"+user.getHashedPassword()+'\n';
+                System.out.println("Writing: " + text);
+                w.write(text);
+            }
+            w.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public void loadRecord(){
+        try{
+            File inputFile = new File("User.txt");
+            InputStreamReader r = new InputStreamReader(new FileInputStream(inputFile));
+            BufferedReader br = new BufferedReader(r);
+            String line;
+            while ((line = br.readLine()) != null) {
+                StringTokenizer stok = new StringTokenizer(line, ";");
+                String username = null, hashPassword = null;
+                username = stok.nextToken().substring(9);
+                hashPassword = stok.nextToken().substring(13);
+                UserList.add(new User(username,hashPassword));
+            }
+            r.close();
+            br.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+//        for(User user : UserList){
+//            System.out.println(user.getUsername() + "       " + user.getHashedPassword());
+//        }
     }
 }

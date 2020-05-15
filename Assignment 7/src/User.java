@@ -58,13 +58,11 @@ public class User {
         return false;
     }
 
-    /**
-     * Perform the edit record option.
-     * Update the record according to the given new hashed password, new full name, and new email address.
-     *
-     * @param hashedPassword the new hashed password
-     */
-    public void editRecord(String hashedPassword){
-        this.hashedPassword = hashedPassword;
+    public String getUsername(){
+        return this.userName;
+    }
+
+    public String getHashedPassword(){
+        return this.hashedPassword;
     }
 }
