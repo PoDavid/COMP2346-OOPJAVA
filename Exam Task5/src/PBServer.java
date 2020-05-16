@@ -19,6 +19,7 @@ public class PBServer {
 	public void go() {		
 		
 		ac_store = new AccessControlManager();
+		autosave = true;
 		pb = new Phonebook(autosave);
 			
 		try {
@@ -31,15 +32,15 @@ public class PBServer {
 				
 				System.out.println("Accepting connection");
 				
-				ClientHandler ch = new ClientHandler(s);
-				ch.ch_go();
+				Thread t = new Thread(new ClientHandler(s));
+				t.start();
 				
 			}
 		} catch (Exception e) { e.printStackTrace(); }
 		
 	}
 	
-	class ClientHandler {
+	class ClientHandler implements Runnable {
 		
 		OutputStream os;
 		ObjectOutputStream oos;
@@ -59,7 +60,7 @@ public class PBServer {
 		}
 			
 		
-		public void ch_go() {	
+		public void run() {
 			
 			boolean more_msg = true;
 			
@@ -99,7 +100,6 @@ public class PBServer {
 							{
 								int i = allMatching.get(0);
 								m.entry = pb.getEntry(i);
-								System.out.println("m.entry: " + m.entry);
 								m.recno = i;
 								m.reply_msg = "GETBYNAME success";
 								if (allMatching.size()>1){
@@ -119,7 +119,7 @@ public class PBServer {
 					else if ( m.command.equals("GETBYRECNO") )
 					{
 						// code to perform get by rec no.
-						System.out.println("GETBYRECNAME: " + entry_name);
+						System.out.println("GETBYRECNO: " + entry_name);
 						m.entry = null;
 						if ( ac_store.checkReadPerm(m.username) )
 						{
@@ -175,7 +175,6 @@ public class PBServer {
 					}
 					else if ( m.command.equals("DELETE") )
 					{
-						// code to delete the Phonebook entry
 						if ( ac_store.checkWritePerm(m.username) )
 						{
 							int i = pb.entryExist(m.entry.name);
@@ -188,6 +187,44 @@ public class PBServer {
 								m.reply_msg = "Phonebook entry does not exist";
 						} else {
 							m.reply_msg = "Invalid permission";
+						}
+					}
+					else if ( m.command.equals("PREV") ) {
+						System.out.println("PREV: " + entry_name);
+						if (entry_name.isEmpty()) {
+							m.reply_msg = "Empty record no. field.";
+						} else {
+							m.entry = null;
+							if (ac_store.checkReadPerm(m.username)) {
+								int i = Integer.parseInt(entry_name) - 1;
+								if (pb.recnoExist(i)) {
+									m.entry = pb.getEntry(i);
+									m.recno = i;
+									m.reply_msg = "PREV success";
+								} else
+									m.reply_msg = "Phonebook entry out of bound";
+							} else {
+								m.reply_msg = "Invalid permission";
+							}
+						}
+					}
+					else if ( m.command.equals("NEXT") ) {
+						System.out.println("NEXT: " + entry_name);
+						if (entry_name.isEmpty()) {
+							m.reply_msg = "Empty record no. field.";
+						} else {
+							m.entry = null;
+							if (ac_store.checkReadPerm(m.username)) {
+								int i = Integer.parseInt(entry_name) + 1;
+								if (pb.recnoExist(i)) {
+									m.entry = pb.getEntry(i);
+									m.recno = i;
+									m.reply_msg = "NEXT success";
+								} else
+									m.reply_msg = "Phonebook entry does not exist";
+							} else {
+								m.reply_msg = "Invalid permission";
+							}
 						}
 					}
 					else if ( m.command.equals("LOGOFF") )
@@ -213,7 +250,6 @@ public class PBServer {
 		}
 
 	}
-
 }
 
 

@@ -10,7 +10,7 @@ public class AccessControlManager {
 		userlist[0] = new User("admin","admin99",true,true);
 		userlist[1] = new User("kpchow","default",true,true);
 		userlist[2] = new User("guest","guest",true,false);
-		userlist[3] = new User("3035372098", "default", true,true);
+		userlist[3] = new User("3035372098", "default", false,false);
 		n = 4;
 	}
 

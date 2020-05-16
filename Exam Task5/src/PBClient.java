@@ -15,7 +15,7 @@ public class PBClient {
 	String pb_name, pb_phone, pb_addr;
 	JTextField name_field, phone_field, recno_field, msg_field;
 	JTextArea addr_field;
-	JButton jb_getbyname, jb_getbyno, jb_add, jb_update, jb_delete, jb_logoff;
+	JButton jb_getbyname, jb_getbyno, jb_add, jb_update, jb_delete, jb_logoff, jb_prev, jb_next;
 	JPanel mp1, mp2, mp3, mp, south_p, north_p;
 	JLabel j_name, j_phone, j_addr, j_pbtitle, title, j_recno, j_msg;
 	JTextField j_pbuser;
@@ -57,7 +57,7 @@ public class PBClient {
 		
 		jf_main = new JFrame("Simple Phonebook Client");
 		jf_main.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		jf_main.setBounds(300,90,600,500);
+		jf_main.setBounds(300,90,700,500);
         // jf_main.setResizable(false);
         
         create_main_gui();    
@@ -83,16 +83,24 @@ public class PBClient {
 		jb_delete = new JButton("Delete");
 		jb_delete.addActionListener(new DeleteButtonListener());
 
+		jb_prev = new JButton("Prev");
+		jb_prev.addActionListener(new PrevButtonListener());
+
+		jb_next = new JButton("Next");
+		jb_next.addActionListener(new NextButtonListener());
+
 		jb_logoff = new JButton("Logoff");
 		jb_logoff.addActionListener(new LogoffButtonListener());
-		
+
 		south_p = new JPanel();
 		south_p.add(jb_getbyname);
 		south_p.add(jb_getbyno);
 		south_p.add(jb_add);
 		south_p.add(jb_update);
 		south_p.add(jb_delete);
-		south_p.add(jb_logoff);		
+		south_p.add(jb_prev);
+		south_p.add(jb_next);
+		south_p.add(jb_logoff);
 		
 		mp1 = new JPanel();
 		mp2 = new JPanel();
@@ -471,6 +479,86 @@ public class PBClient {
 				}
 				else{
 					System.out.println("LOGOUT Unsuccessfully");
+				}
+
+			} catch (Exception e) {
+				System.out.print("Network exception");
+				e.printStackTrace();
+				System.exit(0);
+			}
+		}
+	}
+
+	class PrevButtonListener implements ActionListener {
+		public void actionPerformed(ActionEvent ev) {
+			SPBMessage mesg, reply_m;
+			PhonebookEntry pbe = new PhonebookEntry();
+
+			try {
+				user = user_field.getText();
+				char[] inpwd = pwd_field.getPassword();
+				pwd = new String(inpwd);
+
+				System.out.println("User: " + user);
+				System.out.println("Password: " + pwd);
+
+				pbe.name = recno_field.getText();
+
+				mesg = new SPBMessage("PREV",user,pwd,pbe,null);
+				oos.writeObject(mesg);
+				reply_m = (SPBMessage) ois.readObject();
+				String m = reply_m.reply_msg;
+				PhonebookEntry pbe1 = reply_m.entry;
+
+				if ( ! m.equals("PREV success") ) {
+					msg_field.setText(m);
+				}
+				else {
+					name_field.setText(pbe1.name);
+					phone_field.setText(pbe1.phone_no);
+					addr_field.setText(pbe1.address);
+					recno_field.setText(reply_m.recno.toString());
+					msg_field.setText(m);
+				}
+
+			} catch (Exception e) {
+				System.out.print("Network exception");
+				e.printStackTrace();
+				System.exit(0);
+			}
+		}
+	}
+
+	class NextButtonListener implements ActionListener {
+		public void actionPerformed(ActionEvent ev) {
+			SPBMessage mesg, reply_m;
+			PhonebookEntry pbe = new PhonebookEntry();
+
+			try {
+				user = user_field.getText();
+				char[] inpwd = pwd_field.getPassword();
+				pwd = new String(inpwd);
+
+				System.out.println("User: " + user);
+				System.out.println("Password: " + pwd);
+
+				pbe.name = recno_field.getText();
+
+				mesg = new SPBMessage("NEXT",user,pwd,pbe,null);
+				oos.writeObject(mesg);
+				reply_m = (SPBMessage) ois.readObject();
+				String m = reply_m.reply_msg;
+				PhonebookEntry pbe1 = reply_m.entry;
+
+				if ( ! m.equals("NEXT success") ) {
+					msg_field.setText(m);
+				}
+				else {
+					name_field.setText(pbe1.name);
+					phone_field.setText(pbe1.phone_no);
+					addr_field.setText(pbe1.address);
+					recno_field.setText(reply_m.recno.toString());
+					msg_field.setText(m);
 				}
 
 			} catch (Exception e) {

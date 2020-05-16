@@ -1,15 +1,17 @@
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Phonebook {
 	ArrayList<PhonebookEntry> entry_list;
 	int entry_count = 0;
-	final String phfile = "D:\\Users\\David\\Documents\\School\\HKU\\Year 4\\Sem2\\COMP2396\\COMP2396 Program\\Exam Task5\\src\\Phonebook.sav";
-	// final String phfile = "Phonebook.sav";
+	final String phfile = "Phonebook.sav";
 	File pbfile;
 	ObjectInputStream pbis;
 	ObjectOutputStream pbos;
 	boolean autosave;
+	long period = 5000;
 	
 	public Phonebook(boolean autosaveflag) {
 		autosave = autosaveflag;
@@ -29,6 +31,10 @@ public class Phonebook {
 			
 			if ( pbis != null )
 				pbis.close();
+
+			Timer timer = new Timer();
+			timer.schedule(new AutoSave(), 0, period);
+
 		} catch (IOException e) {
 			System.out.println("Unable to handle input Phonebook.sav");
 			System.exit(0);;
@@ -38,13 +44,28 @@ public class Phonebook {
 		} 
 		
 	}
+
+	class AutoSave extends TimerTask {
+		@Override
+		public synchronized void run() {
+			try {
+				System.out.println("Auto Saving");
+				pbos = new ObjectOutputStream(new FileOutputStream(pbfile));
+				pbos.writeObject(entry_list);
+				pbos.close();
+
+			} catch (IOException e) {
+				System.out.println("Unable to handle update Phonebook.sav");
+				System.exit(0);;
+			}
+		}
+	}
 		
-	public void updatePBFile() {
+	public synchronized void updatePBFile() {
 		
 		if ( autosave ) return;
 		
 		try {
-			
 			pbos = new ObjectOutputStream(new FileOutputStream(pbfile));
 			pbos.writeObject(entry_list);			
 			pbos.close();
@@ -60,7 +81,6 @@ public class Phonebook {
 	//		returns –1 if nm is not in the entry_list
 	//		returns index to the entry_list array 
 	public int entryExist(String nm) {
-		nm = nm.toUpperCase();
 		int i;
 		for (i=0; i<entry_count; i++ ) {
 			if ( entry_list.get(i).name.equals(nm) ) return i;
@@ -82,7 +102,7 @@ public class Phonebook {
 	// addEntry(nm,phonebook_entry):  add the name nm with phonebook_entry to the
 	//						phonebook
 	//		returns false if name nm is already in the entry_list or the list is full
-	public boolean addEntry(String nm, PhonebookEntry pbe) {
+	public synchronized boolean addEntry(String nm, PhonebookEntry pbe) {
 		
 		if ( entryExist(nm) >= 0 ) return false;
 		entry_list.add(pbe);
@@ -117,18 +137,18 @@ public class Phonebook {
 		
 	}
 
-	public void updateEntry(int recno,PhonebookEntry pbe){
+	public synchronized void updateEntry(int recno,PhonebookEntry pbe){
 		entry_list.set(recno, pbe);
 		updatePBFile();
 	}
 
-	public void deleteEntry(int recno){
+	public synchronized void deleteEntry(int recno){
 		entry_list.remove(recno);
 		entry_count--;
 		updatePBFile();
 	}
 
 	public boolean recnoExist(int recno){
-		return entry_count>recno;
+		return entry_count>recno && recno>=0;
 	}
 }
