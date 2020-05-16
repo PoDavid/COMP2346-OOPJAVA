@@ -1,4 +1,3 @@
-
 public class L {
 	
 	private LL h;
@@ -29,7 +28,7 @@ public class L {
 			l2 = l4;
 		}
 		
-		h = l1;
+		h = l1.n;
 	}
 	
 	public void printL() {
@@ -46,7 +45,7 @@ public class L {
 		
 		System.out.println("Start L");
 		
-		LL ll = new LL(1,new LL(2, new LL(3, new LL(4))));
+		LL ll = new LL(1,new LL(2, new LL(3, new LL(4,new LL(5)))));
 		L l = new L(ll);
 		
 		l.printL();

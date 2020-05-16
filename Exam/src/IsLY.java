@@ -1,4 +1,3 @@
-
 public class IsLY {
 
 	public static class LYEx extends Exception { }
@@ -10,13 +9,12 @@ public class IsLY {
 		long yAsLong = Long.parseLong(s);
 
 		final boolean results[] =
-			{ true, false, false, true,
-			  false, false, false, false };
-
+			{ false, false, false, false,
+			  true, true, false, true };
 		if ( results[
 		     ((((yAsLong % 4) == 0) ? 1 : 0) << 2) +
 		     ((((yAsLong % 100) == 0) ? 1 : 0) << 1) +
-		     ((((yAsLong % 400) == 0) ? 1 : 0) << 0)]) {
+		     ((((yAsLong % 400) == 0) ? 1 : 0))]) {
 			throw new LYEx();
 		} else {
 			throw new NLYEx();
@@ -27,9 +25,10 @@ public class IsLY {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		if (args.length > 0) {
-
 			try {
+				System.out.println("Args: " + args[0]);
 				checkLY(args[0]);
+
 			} catch ( NumberFormatException e ) {
 				System.out.println(
 					"Invalid argument: " +

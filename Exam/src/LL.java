@@ -1,4 +1,3 @@
-
 public class LL {
 	
 	private int v;
