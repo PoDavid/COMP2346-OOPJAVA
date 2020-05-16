@@ -7,12 +7,16 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 /**
- * The ImageSharingSystem class, used to simulate the Puzzle Game.
+ * The ServerImageSharingSystem class, used to simulate the Puzzle Game.
  * @author Po Yat Ching David UID:3035372098
  */
-public class ImageSharingSystem extends JFrame {
+public class ServerImageSharingSystem extends JFrame {
     private ImagePanel jp_image;
     private Boolean firstClick = false;
     private int x1;
@@ -21,43 +25,18 @@ public class ImageSharingSystem extends JFrame {
     private int y2;
     private MouseAdapter mouseAdapter;
     /**
-     * Instantiates a new Puzzle game.
+     * Instantiates a new ServerImageSharingSystem.
      */
-    public ImageSharingSystem() {
-        super("Puzzle Game");
+    public ServerImageSharingSystem() {
+        super("Image Server");
     }
 
     /**
      * The driven program of the Puzzle Game
      */
     public void go() {
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(700, 750);
-
-        File selectedFile = chooseFile();
-        if (selectedFile == null) {
-            System.out.println("No File Selected.");
-            return;
-        }
-        jp_image = new ImagePanel(selectedFile.getAbsolutePath());
-
         setMouseAdapter();
-
-        jp_image.addMouseListener(mouseAdapter);
-
-        getContentPane().add(BorderLayout.NORTH, jp_image);
-
-        JPanel jp_buttons = new JPanel();
-
-        JButton jb_new = new JButton("Load another image");
-        jb_new.addActionListener(new NewListener());
-
-        jp_buttons.add(jb_new);
-
-        jp_buttons.setLayout(new GridLayout(1, 1, 0, 0));
-        getContentPane().add(BorderLayout.SOUTH, jp_buttons);
-        pack();
-        setVisible(true);
+        setView();
     }
 
     private void setMouseAdapter(){
@@ -88,6 +67,39 @@ public class ImageSharingSystem extends JFrame {
             }
         };
     }
+
+
+    private void setView(){
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        setSize(700, 750);
+
+        File selectedFile = chooseFile();
+        if (selectedFile == null) {
+            System.out.println("No File Selected.");
+            return;
+        }
+
+        jp_image = new ImagePanel(selectedFile.getAbsolutePath());
+
+        jp_image.addMouseListener(mouseAdapter);
+
+        getContentPane().add(BorderLayout.NORTH, jp_image);
+
+        JPanel jp_buttons = new JPanel();
+
+        JButton jb_new = new JButton("Load another image");
+        jb_new.addActionListener(new NewListener());
+
+        jp_buttons.add(jb_new);
+
+        jp_buttons.setLayout(new GridLayout(1, 1, 0, 0));
+        getContentPane().add(BorderLayout.SOUTH, jp_buttons);
+        pack();
+        setVisible(true);
+    }
+
+
     /**
      * Present a file chooser to ask for an image file.
      *

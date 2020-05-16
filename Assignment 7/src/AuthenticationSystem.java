@@ -40,26 +40,19 @@ public class AuthenticationSystem implements Hashing {
      *
      * @return the authenticated user's username or null if username and password does not match
      */
-    public String authenticate() {
-        System.out.println("Please enter your username:");
-        String username = getInput();
-        System.out.println("Please enter your password:");
-        String password = getInput();
+    public boolean authenticate(String username, String hashedPassword) {
         boolean usernameMatch = false;
         boolean authenticated = false;
         for(User user : UserList){
             if(user.checkUsername(username)) {
                 usernameMatch = true;
-                if(user.checkPassword(hash(password)))
+                if(user.checkPassword(hashedPassword))
                     authenticated = true;
             }
         }
         if(!usernameMatch)
             System.out.println("User not found!");
-        if (authenticated)
-            return username;
-        else
-            return null;
+        return authenticated;
     }
 
     /**
