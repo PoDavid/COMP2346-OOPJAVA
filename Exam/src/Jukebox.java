@@ -40,8 +40,8 @@ public class Jukebox {
 	
 	void getSongs() {
 		try {
-			File f = new File("C:\\SongList.txt");
-			//File f = new File("D:\\Users\\David\\Documents\\School\\HKU\\Year 4\\Sem2\\COMP2396\\COMP2396 Program\\Exam\\src\\SongList.txt");
+			//File f = new File("C:\\SongList.txt");
+			 File f = new File("D:\\Users\\David\\Documents\\School\\HKU\\Year 4\\Sem2\\COMP2396\\COMP2396 Program\\Exam\\src\\SongList.txt");
 			BufferedReader reader=new BufferedReader(new FileReader(f));
 			String line = null;
 			

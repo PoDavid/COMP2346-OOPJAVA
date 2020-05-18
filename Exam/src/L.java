@@ -45,7 +45,7 @@ public class L {
 		
 		System.out.println("Start L");
 		
-		LL ll = new LL(1,new LL(2, new LL(3, new LL(4,new LL(5)))));
+		LL ll = new LL(1,new LL(2, new LL(3, new LL(4))));
 		L l = new L(ll);
 		
 		l.printL();
