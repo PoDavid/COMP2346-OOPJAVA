@@ -5,7 +5,6 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 /**
  * The ImagePanel class, used to model the canvas for displaying the Image Puzzle.
@@ -22,6 +21,16 @@ class ImagePanel extends JPanel {
      */
     ArrayList<BufferedImage> imgList = new ArrayList<>();
 
+    ImagePanel(){
+        img = new BufferedImage(10,10, BufferedImage.TYPE_INT_ARGB);
+        this.setPreferredSize(new Dimension(700, 700));
+        for(int x = 0; x < img.getWidth(); x++) {
+            for(int y = 0; y < img.getHeight(); y++) {
+                img.setRGB(x, y, Color.white.getRGB());
+            }
+        }
+        loadImage();
+    }
     /**
      * Instantiates a new Image panel.
      *
@@ -94,9 +103,21 @@ class ImagePanel extends JPanel {
         int firstBlock;
         int secondBlock;
 
+        System.out.println("Swapping");
+        System.out.println("X - Y " + x1 + ", " + y1 + ", " + x2 + ", " + y2);
         firstBlock = x1/70*10 + y1/70;
         secondBlock = x2/70*10 + y2/70;
         Collections.swap(imgList,firstBlock,secondBlock);
+        ImageServer.updatePeer(x1, y1, x2, y2);
+        repaint();
+    }
+
+    public ArrayList<BufferedImage> getImage(){
+        return imgList;
+    }
+
+    public void setImg(ArrayList<BufferedImage> newImg){
+        imgList = newImg;
         repaint();
     }
 }

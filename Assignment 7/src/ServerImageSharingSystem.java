@@ -17,7 +17,7 @@ import java.net.Socket;
  * @author Po Yat Ching David UID:3035372098
  */
 public class ServerImageSharingSystem extends JFrame {
-    private ImagePanel jp_image;
+    ImagePanel jp_image;
     private Boolean firstClick = false;
     private int x1;
     private int y1;
@@ -126,11 +126,12 @@ public class ServerImageSharingSystem extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             File selectedFile = chooseFile();
-            if (selectedFile == null) {
+            if (selectedFile==null){
                 System.out.println("No File Selected.");
                 return;
             }
             jp_image.newImage(selectedFile.getAbsolutePath());
+            ImageServer.loadImg();
         }
     }
 }
